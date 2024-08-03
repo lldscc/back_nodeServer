@@ -9,6 +9,9 @@ const expressJoi = require('@escook/express-joi')
 // 上传头像
 router.post('/uploadAvatar',userInfoHandle.uploadAvatar)
 
+// 绑定账号
+router.post('/bindAccount',userInfoHandle.bindAccount)
+
 // 获取用户信息
 router.get('/userinfo',userInfoHandle.userinfo)
 

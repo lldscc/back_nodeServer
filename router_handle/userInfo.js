@@ -30,6 +30,31 @@ exports.uploadAvatar = (req, res) => {
 	})
 }
 
+/**
+ * 头像绑定账号
+ * @param  req 
+ */
+exports.bindAccount = (req, res) =>{
+  const {account, onlyId, url} = req.body
+  console.log(account,onlyId,url);
+  const sql = 'update image set account = ? where onlyId = ?' // 通过onlyId绑定账号 更新image表
+  db.query(sql,[account, onlyId], (err,results) =>{
+    if (err) return res.cc(err)
+    if (results.affectedRows  == 1){
+      const sql1 = 'update users set image_url = ? where account = ?' // 通过账号绑定头像 更新users表
+      db.query(sql1,[url, account], (err,result) =>{
+          if (err) return res.cc(err)
+          res.send({
+            code: 0,
+            message: '修改成功'
+          })
+      })
+    }else{
+      res.cc(err)
+    }
+  })
+}
+
 // 获取用户个人信息
 // 第一种方法：通过jsonwebtoken 解析出token id 根据id从数据库查询个人信息
 // 第二种方法: app.js 使用express-jwt 解析的用户信息保存到req.anth中
