@@ -100,3 +100,41 @@ exports.changeUserInfo = (req, res) =>{
     })
   })
 }
+
+/**
+ * 修改密码
+ * 通过id查询旧密码，对比新密码与旧密码是否一致，一致则修改密码
+ * @param {*} req {id, oldPassword, newPassword} 
+ * @param {*} res 
+ */
+exports.changePassword = (req, res) => {
+  const {id, oldPassword, newPassword} = req.body
+  const sql = 'select password from users where id = ?'
+  db.query(sql, id, (err,result) =>{
+    if(err) return res.cc(err)
+    if (result.length === 0) {
+      res.send({
+        code: 1,
+        message: '用户不存在！'
+      })
+    }
+    // 使用bcrypt.compareSync方法 比较密码是否与数据库表一致
+    const compareResult  = bcrypt.compareSync(oldPassword,result[0].password)
+    if(!compareResult){
+      res.send({
+        code: 1,
+        message: '旧密码错误！'
+      })
+    }
+    // 一致 修改密码(bcrypt.hashSync方法加密新密码 更新users表)
+    const newPasswordHash = bcrypt.hashSync(newPassword, 10)
+    const sql1 = 'update users set password = ? where id = ?'
+    db.query(sql1, [newPasswordHash, id], (err,result) =>{
+      if(err) return res.cc(err)
+      res.send({
+        code: 0,
+        message: '修改密码成功！'
+      })
+    })
+  })
+}

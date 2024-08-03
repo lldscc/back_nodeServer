@@ -6,8 +6,8 @@ const email = joi.string().pattern(/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(.[
 const sex = joi.string()
 const identity = joi.string()
 const department = joi.string()
-const oldPassword = joi.string().pattern(/^(?![0-9]+$)[a-z0-9]{1,50}$/).min(6).max(12).required()
-const newPassword = joi.string().pattern(/^(?![0-9]+$)[a-z0-9]{1,50}$/).min(6).max(12).required()
+const oldPassword = joi.string().pattern(/^(?![0-9]+$)[a-zA-Z0-9]{1,50}$/).min(6).max(12).required()
+const newPassword = joi.string().pattern(/^(?![0-9]+$)[a-zA-Z0-9]{1,50}$/).min(6).max(12).required()
 
 // 修改用户信息的限制条件
 exports.changeUserInfo_limit = {
@@ -18,5 +18,14 @@ exports.changeUserInfo_limit = {
         sex,
         identity,
         department
+    }    
+}
+
+// 修改密码的限制条件
+exports.changePassword_limit = {
+    body: {
+        id,
+        oldPassword,
+        newPassword
     }    
 }
