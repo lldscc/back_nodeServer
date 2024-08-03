@@ -7,12 +7,10 @@ const fs = require('fs') // 处理文件
 
 /**
  * 上传头像
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req {files：{filename, originalname}}
  */
 exports.uploadAvatar = (req, res) => {
-	// 生成唯一标识
-	const onlyId = crypto.randomUUID()
+	const onlyId = crypto.randomUUID() 	// 生成唯一标识
 	let oldName = req.files[0].filename;
 	let newName = Buffer.from(req.files[0].originalname, 'latin1').toString('utf8')
 	fs.renameSync('./public/upload/' + oldName, './public/upload/' + newName)
@@ -32,7 +30,7 @@ exports.uploadAvatar = (req, res) => {
 
 /**
  * 头像绑定账号
- * @param  req 
+ * @param {*} req {account, onlyId, url}
  */
 exports.bindAccount = (req, res) =>{
   const {account, onlyId, url} = req.body
@@ -59,8 +57,7 @@ exports.bindAccount = (req, res) =>{
  * 获取个人信息
  * 第一种方法：通过jsonwebtoken 解析出token id 根据id从数据库查询个人信息
  * 第二种方法: app.js 使用express-jwt 解析的用户信息保存到req.anth中
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req {token}
  */
 exports.userinfo = (req, res) => {
   // 解析token 获取用户id
@@ -86,8 +83,7 @@ exports.userinfo = (req, res) => {
  * 修改个人信息
  * 根据id修改信息
  * TODO 优化：动态参数 非空判断？？
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req {id, name, sex, email, identity, department}
  */
 exports.changeUserInfo = (req, res) =>{
   const {id, name, sex, email, identity, department } = req.body
@@ -105,7 +101,6 @@ exports.changeUserInfo = (req, res) =>{
  * 修改密码
  * 通过id查询旧密码，对比新密码与旧密码是否一致，一致则修改密码
  * @param {*} req {id, oldPassword, newPassword} 
- * @param {*} res 
  */
 exports.changePassword = (req, res) => {
   const {id, oldPassword, newPassword} = req.body
