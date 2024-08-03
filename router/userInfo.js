@@ -3,19 +3,20 @@
  */
 const express = require('express')
 const router = express.Router()
-const userInfoHandle = require('../router_handle/userInfo')
 const expressJoi = require('@escook/express-joi')
+const {changeUserInfo_limit }  = require('../limit/user.js')
+const userInfoHandle = require('../router_handle/userInfo')
 
 // 上传头像
-router.post('/uploadAvatar',userInfoHandle.uploadAvatar)
+router.post('/uploadAvatar', userInfoHandle.uploadAvatar)
 
 // 绑定账号
-router.post('/bindAccount',userInfoHandle.bindAccount)
+router.post('/bindAccount', userInfoHandle.bindAccount)
 
 // 获取用户信息
-router.get('/userinfo',userInfoHandle.userinfo)
+router.get('/userinfo', userInfoHandle.userinfo)
 
 // 修改用户信息
-router.post('/changeUserInfo', userInfoHandle.changeUserInfo)
+router.post('/changeUserInfo', expressJoi(changeUserInfo_limit), userInfoHandle.changeUserInfo)
 
 module.exports = router
