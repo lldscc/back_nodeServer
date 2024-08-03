@@ -18,10 +18,10 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 // ## 上传文件
-// const multer = require('multer')
-// const upload = multer({dest:'./public/upload'})
-// app.use(upload.any)
-// app.use(express.static("./public"))
+const multer = require('multer')
+const upload = multer({dest:'./public/upload'})
+app.use(upload.any())
+app.use(express.static("./public"))
 
 // ## 中间件：封装响应统一处理错误信息
 app.use((req,res,next)=>{
@@ -35,11 +35,11 @@ app.use((req,res,next)=>{
 })
 
 // ## express-jwt 放在路由前
-app.use(jwt({
-  secret:jwtconfig.jwtSecretkey,algorithms:['HS256']
-}).unless({
-  path:[/^\/api\//]
-}))
+// app.use(jwt({
+//   secret:jwtconfig.jwtSecretkey,algorithms:['HS256']
+// }).unless({
+//   path:[/^\/api\//]
+// }))
 
 // token 过期 (拦截请求头)
 app.use((req,res,next)=>{
@@ -60,7 +60,7 @@ app.use((req,res,next)=>{
 
 // ## 路由
 app.use('/api',loginRouter)
-app.use(userInfoRouter)
+app.use('/user', userInfoRouter)
 
 // ## 全局错误的中间件 不符合规则处理
 app.use((err,req, res, next) => {
@@ -71,6 +71,8 @@ app.use((err,req, res, next) => {
 		})
 	}
 })
+
+// 全局中间件
 app.use((err,req,res,next)=>{
   console.log(err);
   // token 无效
