@@ -133,3 +133,41 @@ exports.changePassword = (req, res) => {
     })
   })
 }
+
+/**
+ * 忘记密码-修改密码
+ * TODO待实现: 一般是通过邮箱找回密码, 学到邮箱验证后再实现
+ * 通过用户名查询email 与请求的email是否一致，一致则根据用户名(可以更改成id 用户名不重复应该不影响)修改密码
+ * @param {*} req {account, email, newPassword}
+ */
+exports.forgetPasswrod = (req, res) => {
+  const {account, email, newPassword} = req.body
+  const sql = 'select email from users where account = ?' // 根据用户名查询表中email
+  db.query(sql, account, (err,result) =>{
+    if(err) return res.cc(err)
+    console.log('result',result)
+    if(result.length === 0) {
+      res.send({
+        code: 1,
+        message: '用户不存在！'
+      })
+    }
+    if(result[0].email !== email){
+      res.send({
+        code: 1,
+        message: '邮箱错误！'
+      })
+    }
+    if(result[0].email == email){
+      const newPasswordHash = bcrypt.hashSync(newPassword, 10) // 加密新密码
+      const sql1 = 'update users set password = ? where account = ?' // 修改密码
+      db.query(sql1, [newPasswordHash, account], (err,result) =>{
+        if(err) return res.cc(err)
+        res.send({
+          code: 0,
+          message: '修改成功'
+        })
+      })
+    }
+  })
+}

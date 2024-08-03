@@ -4,7 +4,7 @@
 const express = require('express')
 const router = express.Router()
 const expressJoi = require('@escook/express-joi')
-const {changeUserInfo_limit, changePassword_limit }  = require('../limit/user.js')
+const {changeUserInfo_limit, changePassword_limit, forgetPassword_limit }  = require('../limit/user.js')
 const userInfoHandle = require('../router_handle/userInfo')
 
 // 上传头像
@@ -21,5 +21,8 @@ router.post('/changeUserInfo', expressJoi(changeUserInfo_limit), userInfoHandle.
 
 // 修改密码
 router.post('/changePassword', expressJoi(changePassword_limit), userInfoHandle.changePassword)
+
+// 忘记密码
+router.post('/forgetPasswrod', expressJoi(forgetPassword_limit), userInfoHandle.forgetPasswrod)
 
 module.exports = router
