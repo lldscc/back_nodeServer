@@ -55,9 +55,13 @@ exports.bindAccount = (req, res) =>{
   })
 }
 
-// 获取用户个人信息
-// 第一种方法：通过jsonwebtoken 解析出token id 根据id从数据库查询个人信息
-// 第二种方法: app.js 使用express-jwt 解析的用户信息保存到req.anth中
+/**
+ * 获取个人信息
+ * 第一种方法：通过jsonwebtoken 解析出token id 根据id从数据库查询个人信息
+ * 第二种方法: app.js 使用express-jwt 解析的用户信息保存到req.anth中
+ * @param {*} req 
+ * @param {*} res 
+ */
 exports.userinfo = (req, res) => {
   // 解析token 获取用户id
   const token = req.headers.authorization.split(' ')[1]
@@ -74,6 +78,25 @@ exports.userinfo = (req, res) => {
       data: {
         userInfo: results[0]
       }
+    })
+  })
+}
+
+/**
+ * 修改个人信息
+ * 根据id修改信息
+ * TODO 优化：动态参数 非空判断？？
+ * @param {*} req 
+ * @param {*} res 
+ */
+exports.changeUserInfo = (req, res) =>{
+  const {id, name, sex, email, identity, department } = req.body
+  const sql = 'update users set name = ?, sex = ?, email = ?, identity = ?, department = ? where id = ?';
+  db.query(sql, [name, sex, email, identity, department, id], (err, result) =>{
+    if(err) return res.cc(err)
+    res.send({
+      code: 0,
+      message: '修改成功！'
     })
   })
 }

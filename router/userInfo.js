@@ -15,5 +15,7 @@ router.post('/bindAccount',userInfoHandle.bindAccount)
 // 获取用户信息
 router.get('/userinfo',userInfoHandle.userinfo)
 
+// 修改用户信息
+router.post('/changeUserInfo', userInfoHandle.changeUserInfo)
 
 module.exports = router
