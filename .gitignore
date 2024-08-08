@@ -7,6 +7,8 @@ yarn-error.log*
 package-lock.json
 tests/**/coverage/
 dist_electron/
+public/upload/*
+!public/upload/
 # Editor directories and files
 .idea
 .vscode
