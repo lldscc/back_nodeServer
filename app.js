@@ -35,11 +35,11 @@ app.use((req,res,next)=>{
 })
 
 // ## express-jwt 放在路由前
-// app.use(jwt({
-//   secret:jwtconfig.jwtSecretkey,algorithms:['HS256']
-// }).unless({
-//   path:[/^\/api\//]
-// }))
+app.use(jwt({
+  secret:jwtconfig.jwtSecretkey,algorithms:['HS256']
+}).unless({
+  path:[/^\/api\//]
+}))
 
 // token 过期 (拦截请求头)
 app.use((req,res,next)=>{

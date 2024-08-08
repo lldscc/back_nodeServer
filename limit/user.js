@@ -13,7 +13,6 @@ const newPassword = joi.string().pattern(/^(?![0-9]+$)[a-zA-Z0-9]{1,50}$/).min(6
 // 修改用户信息的限制条件
 exports.changeUserInfo_limit = {
     body: {
-        id,
         name,
         email,
         sex,
@@ -25,7 +24,6 @@ exports.changeUserInfo_limit = {
 // 修改密码的限制条件
 exports.changePassword_limit = {
     body: {
-        id,
         oldPassword,
         newPassword
     }    

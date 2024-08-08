@@ -86,7 +86,11 @@ exports.userinfo = (req, res) => {
  * @param {*} req {id, name, sex, email, identity, department}
  */
 exports.changeUserInfo = (req, res) =>{
-  const {id, name, sex, email, identity, department } = req.body
+  // 解析token 获取用户id
+  const token = req.headers.authorization.split(' ')[1]
+  const { id } = jwt.verify(token, jwtconfig.jwtSecretkey)
+  const {name, sex, email, identity, department } = req.body
+
   const sql = 'update users set name = ?, sex = ?, email = ?, identity = ?, department = ? where id = ?';
   db.query(sql, [name, sex, email, identity, department, id], (err, result) =>{
     if(err) return res.cc(err)
@@ -103,7 +107,10 @@ exports.changeUserInfo = (req, res) =>{
  * @param {*} req {id, oldPassword, newPassword} 
  */
 exports.changePassword = (req, res) => {
-  const {id, oldPassword, newPassword} = req.body
+  const token = req.headers.authorization.split(' ')[1]
+  const { id } = jwt.verify(token, jwtconfig.jwtSecretkey)
+  const {oldPassword, newPassword} = req.body
+  // console.log(id, oldPassword, newPassword)
   const sql = 'select password from users where id = ?'
   db.query(sql, id, (err,result) =>{
     if(err) return res.cc(err)
